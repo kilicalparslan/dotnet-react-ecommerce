@@ -17,7 +17,7 @@ namespace API.Data
                 Name = "Product 1",
                 Description = "Description 1",
                 Price = 10.0m,
-                ImageUrl = "https://example.com/image1.jpg",
+                ImageUrl = "1.jpg",
                 IsActive = true,
                 Stock = 100
             },
@@ -27,7 +27,7 @@ namespace API.Data
                 Name = "Product 2",
                 Description = "Description 2",
                 Price = 20.0m,
-                ImageUrl = "https://example.com/image2.jpg",
+                ImageUrl = "2.jpg",
                 IsActive = true,
                 Stock = 200
             },
@@ -37,9 +37,19 @@ namespace API.Data
                 Name = "Product 3",
                 Description = "Description 3",
                 Price = 30.0m,
-                ImageUrl = "https://example.com/image3.jpg",
+                ImageUrl = "3.jpg",
                 IsActive = true,
                 Stock = 300
+            },
+            new Product
+            {
+                Id = 4,
+                Name = "Product 4",
+                Description = "Description 4",
+                Price = 40.0m,
+                ImageUrl = "4.jpg",
+                IsActive = true,
+                Stock = 400
             });
         }
     }

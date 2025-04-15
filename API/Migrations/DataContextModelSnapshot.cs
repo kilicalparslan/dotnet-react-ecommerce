@@ -52,7 +52,7 @@ namespace API.Migrations
                         {
                             Id = 1,
                             Description = "Description 1",
-                            ImageUrl = "https://example.com/image1.jpg",
+                            ImageUrl = "1.jpg",
                             IsActive = true,
                             Name = "Product 1",
                             Price = 10.0m,
@@ -62,7 +62,7 @@ namespace API.Migrations
                         {
                             Id = 2,
                             Description = "Description 2",
-                            ImageUrl = "https://example.com/image2.jpg",
+                            ImageUrl = "2.jpg",
                             IsActive = true,
                             Name = "Product 2",
                             Price = 20.0m,
@@ -72,11 +72,21 @@ namespace API.Migrations
                         {
                             Id = 3,
                             Description = "Description 3",
-                            ImageUrl = "https://example.com/image3.jpg",
+                            ImageUrl = "3.jpg",
                             IsActive = true,
                             Name = "Product 3",
                             Price = 30.0m,
                             Stock = 300
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Description 4",
+                            ImageUrl = "4.jpg",
+                            IsActive = true,
+                            Name = "Product 4",
+                            Price = 40.0m,
+                            Stock = 400
                         });
                 });
 #pragma warning restore 612, 618

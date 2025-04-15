@@ -39,6 +39,8 @@ app.UseCors((opt) =>
        .WithOrigins("http://localhost:3000");
 });
 
+app.UseStaticFiles();
+
 app.UseAuthorization();
 
 app.MapControllers();
