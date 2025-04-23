@@ -6,8 +6,9 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import { IProduct } from "../model/IProduct";
+import { IProduct } from "../../model/IProduct";
 import { AddShoppingCart, Visibility } from "@mui/icons-material";
+import { Link } from "react-router";
 
 interface Props {
   product: IProduct;
@@ -46,6 +47,8 @@ export default function Product({ product }: Props) {
           Add to cart
         </Button>
         <Button
+          component={Link}
+          to={`/catalog/${product.id}`}
           startIcon={<Visibility />}
           size="small"
           variant="outlined"
