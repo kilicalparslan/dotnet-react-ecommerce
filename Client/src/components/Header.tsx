@@ -16,6 +16,7 @@ const links = [
   { name: "Catalog", path: "/catalog" },
   { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
+  { name: "Error", path: "/error" },
 ];
 
 const navStyles = {
