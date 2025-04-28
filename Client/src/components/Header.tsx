@@ -9,7 +9,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const links = [
   { name: "Home", path: "/" },
@@ -51,6 +51,8 @@ export default function Header(props: any) {
         </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <IconButton
+            component={Link}
+            to="/cart"
             size="large"
             edge="start"
             color="inherit"
