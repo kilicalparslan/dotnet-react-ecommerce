@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
-import requests from "../../api/requests";
 import {
-  CircularProgress,
-  IconButton,
+  Alert,
   Paper,
   Table,
   TableBody,
@@ -11,23 +8,42 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { Cart } from "../../model/ICarts";
-import { Delete } from "@mui/icons-material";
+import {
+  AddCircleOutline,
+  Delete,
+  RemoveCircleOutline,
+} from "@mui/icons-material";
+import { useCartContext } from "../../context/CartContext";
+import { LoadingButton } from "@mui/lab";
+import { useState } from "react";
+import requests from "../../api/requests";
 
 export default function ShoppingCartPage() {
-  const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState<Cart | null>(null);
-  useEffect(() => {
+  const { cart, setCart } = useCartContext();
+  const [status, setStatus] = useState({ loading: false, id: "" });
+
+  function handleAddItem(productId: number, id: string) {
+    setStatus({ loading: true, id: id });
+
     requests.cart
-      .get()
+      .addItem(productId)
       .then((cart) => setCart(cart))
       .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setStatus({ loading: false, id: "" }));
+  }
 
-  if (loading) return <CircularProgress />;
+  function handleDeleteItem(productId: number, id: string, quantity = 1) {
+    setStatus({ loading: true, id: id });
 
-  if (!cart) return <h1>No items in the cart</h1>;
+    requests.cart
+      .deleteItem(productId, quantity)
+      .then((cart) => setCart(cart))
+      .catch((error) => console.log(error))
+      .finally(() => setStatus({ loading: false, id: "" }));
+  }
+
+  if (cart?.cartItems.length === 0)
+    return <Alert severity="warning">Sepetinizde ürün yok</Alert>;
 
   return (
     <TableContainer component={Paper}>
@@ -36,14 +52,14 @@ export default function ShoppingCartPage() {
           <TableRow>
             <TableCell></TableCell>
             <TableCell></TableCell>
-            <TableCell align="right">Price</TableCell>
-            <TableCell align="right">Stock</TableCell>
-            <TableCell align="right">Total Price</TableCell>
+            <TableCell align="right">Fiyat</TableCell>
+            <TableCell align="right">Adet</TableCell>
+            <TableCell align="right">Toplam</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {cart.cartItems.map((item) => (
+          {cart?.cartItems.map((item) => (
             <TableRow
               key={item.productId}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -51,22 +67,55 @@ export default function ShoppingCartPage() {
               <TableCell component="th" scope="row">
                 <img
                   src={`http://localhost:5057/images/${item.imageUrl}`}
-                  alt={item.name}
                   style={{ height: 60 }}
                 />
               </TableCell>
               <TableCell component="th" scope="row">
                 {item.name}
               </TableCell>
-              <TableCell align="right">${item.price.toFixed(2)}</TableCell>
-              <TableCell align="right">{item.quantity}</TableCell>
+              <TableCell align="right">{item.price} ₺</TableCell>
               <TableCell align="right">
-                ${(item.price * item.quantity).toFixed(2)}
+                <LoadingButton
+                  loading={
+                    status.loading && status.id === "add" + item.productId
+                  }
+                  onClick={() =>
+                    handleAddItem(item.productId, "add" + item.productId)
+                  }
+                >
+                  <AddCircleOutline />
+                </LoadingButton>
+                {item.quantity}
+                <LoadingButton
+                  loading={
+                    status.loading && status.id === "del" + item.productId
+                  }
+                  onClick={() =>
+                    handleDeleteItem(item.productId, "del" + item.productId)
+                  }
+                >
+                  <RemoveCircleOutline />
+                </LoadingButton>
               </TableCell>
               <TableCell align="right">
-                <IconButton color="error">
+                {item.price * item.quantity} ₺
+              </TableCell>
+              <TableCell align="right">
+                <LoadingButton
+                  color="error"
+                  loading={
+                    status.loading && status.id === "del_all" + item.productId
+                  }
+                  onClick={() =>
+                    handleDeleteItem(
+                      item.productId,
+                      "del_all" + item.productId,
+                      item.quantity
+                    )
+                  }
+                >
                   <Delete />
-                </IconButton>
+                </LoadingButton>
               </TableCell>
             </TableRow>
           ))}
