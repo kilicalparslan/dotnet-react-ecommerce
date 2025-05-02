@@ -13,6 +13,8 @@ import { useState } from "react";
 import requests from "../../api/requests";
 import { LoadingButton } from "@mui/lab";
 import { useCartContext } from "../../context/CartContext";
+import { toast } from "react-toastify";
+import { currencyUSD } from "../../utils/formatCurrency";
 
 interface Props {
   product: IProduct;
@@ -26,7 +28,10 @@ export default function Product({ product }: Props) {
     setLoading(true);
     requests.cart
       .addItem(productId)
-      .then((cart) => setCart(cart))
+      .then((cart) => {
+        setCart(cart);
+        toast.success("Item added to cart");
+      })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   };
@@ -47,10 +52,7 @@ export default function Product({ product }: Props) {
           {product.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {product.price.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })}
+          {currencyUSD.format(product.price)}
         </Typography>
       </CardContent>
       <CardActions>

@@ -17,6 +17,9 @@ import { useCartContext } from "../../context/CartContext";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 import requests from "../../api/requests";
+import { toast } from "react-toastify";
+import CartSummary from "./CartSummary";
+import { currencyUSD } from "../../utils/formatCurrency";
 
 export default function ShoppingCartPage() {
   const { cart, setCart } = useCartContext();
@@ -52,9 +55,9 @@ export default function ShoppingCartPage() {
           <TableRow>
             <TableCell></TableCell>
             <TableCell></TableCell>
-            <TableCell align="right">Fiyat</TableCell>
-            <TableCell align="right">Adet</TableCell>
-            <TableCell align="right">Toplam</TableCell>
+            <TableCell align="right">Price</TableCell>
+            <TableCell align="right">Quantity</TableCell>
+            <TableCell align="right">Total</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
@@ -73,19 +76,10 @@ export default function ShoppingCartPage() {
               <TableCell component="th" scope="row">
                 {item.name}
               </TableCell>
-              <TableCell align="right">{item.price} ₺</TableCell>
               <TableCell align="right">
-                <LoadingButton
-                  loading={
-                    status.loading && status.id === "add" + item.productId
-                  }
-                  onClick={() =>
-                    handleAddItem(item.productId, "add" + item.productId)
-                  }
-                >
-                  <AddCircleOutline />
-                </LoadingButton>
-                {item.quantity}
+                {currencyUSD.format(item.price)}
+              </TableCell>
+              <TableCell align="right">
                 <LoadingButton
                   loading={
                     status.loading && status.id === "del" + item.productId
@@ -96,29 +90,40 @@ export default function ShoppingCartPage() {
                 >
                   <RemoveCircleOutline />
                 </LoadingButton>
+                {item.quantity}
+                <LoadingButton
+                  loading={
+                    status.loading && status.id === "add" + item.productId
+                  }
+                  onClick={() =>
+                    handleAddItem(item.productId, "add" + item.productId)
+                  }
+                >
+                  <AddCircleOutline />
+                </LoadingButton>
               </TableCell>
-              <TableCell align="right">
-                {item.price * item.quantity} ₺
-              </TableCell>
+              <TableCell align="right">${item.price * item.quantity}</TableCell>
               <TableCell align="right">
                 <LoadingButton
                   color="error"
                   loading={
                     status.loading && status.id === "del_all" + item.productId
                   }
-                  onClick={() =>
+                  onClick={() => {
                     handleDeleteItem(
                       item.productId,
                       "del_all" + item.productId,
                       item.quantity
-                    )
-                  }
+                    );
+                    toast.error("Product removed from cart");
+                  }}
                 >
                   <Delete />
                 </LoadingButton>
               </TableCell>
             </TableRow>
           ))}
+          <CartSummary />
         </TableBody>
       </Table>
     </TableContainer>

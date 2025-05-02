@@ -2,6 +2,7 @@ import {
   CircularProgress,
   Divider,
   Grid,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -14,11 +15,20 @@ import { useParams } from "react-router";
 import { IProduct } from "../../model/IProduct";
 import requests from "../../api/requests";
 import NotFound from "../../errors/NotFound";
+import { LoadingButton } from "@mui/lab";
+import { AddShoppingCart } from "@mui/icons-material";
+import { useCartContext } from "../../context/CartContext";
+import { toast } from "react-toastify";
+import { currencyUSD } from "../../utils/formatCurrency";
 
 export default function ProductDetailsPage() {
+  const { cart, setCart } = useCartContext();
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<IProduct | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdded, setIsAdded] = useState(false);
+
+  const item = cart?.cartItems.find((i) => i.productId === product?.id);
 
   useEffect(() => {
     requests.catalog
@@ -27,6 +37,18 @@ export default function ProductDetailsPage() {
       .catch((error) => console.log("Error fetching product:", error))
       .finally(() => setLoading(false));
   }, [id]);
+
+  function handleAddItem(productId: number) {
+    setIsAdded(true);
+    requests.cart
+      .addItem(productId)
+      .then((cart) => {
+        setCart(cart);
+        toast.success("Item added to cart");
+      })
+      .catch((error) => console.log("Error adding item to cart:", error))
+      .finally(() => setIsAdded(false));
+  }
 
   if (loading) {
     return <CircularProgress />;
@@ -48,10 +70,7 @@ export default function ProductDetailsPage() {
         <Typography variant="h3">{product.name}</Typography>
         <Divider sx={{ mb: 2 }} />
         <Typography variant="h4" color="secondary">
-          {product.price.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })}
+          {currencyUSD.format(product.price)}
         </Typography>
         <TableContainer>
           <Table>
@@ -71,6 +90,23 @@ export default function ProductDetailsPage() {
             </TableBody>
           </Table>
         </TableContainer>
+        <Stack direction="row" sx={{ mt: 3 }} spacing={2} alignItems="center">
+          <LoadingButton
+            variant="outlined"
+            loadingPosition="start"
+            startIcon={<AddShoppingCart />}
+            loading={isAdded}
+            onClick={() => handleAddItem(product.id)}
+          >
+            Add to cart
+          </LoadingButton>
+
+          {item?.quantity! > 0 && (
+            <Typography variant="body2">
+              {item?.quantity} items added the cart
+            </Typography>
+          )}
+        </Stack>
       </Grid>
     </Grid>
   );
