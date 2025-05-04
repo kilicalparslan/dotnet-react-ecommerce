@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Cart } from "../../model/ICart";
 import requests from "../../api/requests";
+import { act } from "react";
 
 interface CartState {
   cart: Cart | null;
@@ -25,7 +26,7 @@ export const addItemToCart = createAsyncThunk<
 
 export const deleteItemFromCart = createAsyncThunk<
   Cart,
-  { productId: number; quantity?: number }
+  { productId: number; quantity?: number; key?: string }
 >("cart/deleteItemFromCart", async ({ productId, quantity = 1 }) => {
   try {
     return await requests.cart.deleteItem(productId, quantity);
@@ -48,7 +49,7 @@ export const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(addItemToCart.pending, (state, action) => {
       console.log("pending", action);
-      state.status = "loading";
+      state.status = "pendingAddItem" + action.meta.arg.productId;
     });
     builder.addCase(addItemToCart.fulfilled, (state, action) => {
       state.cart = action.payload;
@@ -59,7 +60,8 @@ export const cartSlice = createSlice({
     });
     builder.addCase(deleteItemFromCart.pending, (state, action) => {
       console.log("pending", action);
-      state.status = "loading";
+      state.status =
+        "pendingDeleteItem" + action.meta.arg.productId + action.meta.arg.key;
     });
     builder.addCase(deleteItemFromCart.fulfilled, (state, action) => {
       state.cart = action.payload;

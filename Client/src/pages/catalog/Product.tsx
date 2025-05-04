@@ -9,33 +9,18 @@ import {
 import { IProduct } from "../../model/IProduct";
 import { AddShoppingCart, Visibility } from "@mui/icons-material";
 import { Link } from "react-router";
-import { useState } from "react";
-import requests from "../../api/requests";
 import { LoadingButton } from "@mui/lab";
-import { toast } from "react-toastify";
 import { currencyUSD } from "../../utils/formatCurrency";
-import { useAppDispatch } from "../../hooks/hooks";
-import { setCart } from "../cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { addItemToCart } from "../cart/cartSlice";
 
 interface Props {
   product: IProduct;
 }
 
 export default function Product({ product }: Props) {
-  const [loading, setLoading] = useState(false);
+  const { status } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
-
-  const handleAddItem = (productId: number) => {
-    setLoading(true);
-    requests.cart
-      .addItem(productId)
-      .then((cart) => {
-        dispatch(setCart(cart));
-        toast.success("Item added to cart");
-      })
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  };
 
   return (
     <Card>
@@ -57,23 +42,13 @@ export default function Product({ product }: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        {/* <Button
-          startIcon={<AddShoppingCart />}
-          size="small"
-          variant="outlined"
-          color="success"
-          onClick={() => handleAddItem(product.id)}
-        >
-          Add to cart
-        </Button> */}
-
         <LoadingButton
           size="small"
-          loading={loading}
+          loading={status === "pendingAddItem" + product.id}
           variant="outlined"
           loadingPosition="start"
           startIcon={<AddShoppingCart />}
-          onClick={() => handleAddItem(product.id)}
+          onClick={() => dispatch(addItemToCart({ productId: product.id }))}
         >
           Add to cart
         </LoadingButton>
