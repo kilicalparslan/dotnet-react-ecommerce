@@ -2,7 +2,10 @@ using API.Data;
 using API.Entity;
 using API.Middlewares;
 using API.Services;
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+=======
+>>>>>>> d3c1508 (jwt added tokenservice created)
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
