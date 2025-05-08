@@ -11,6 +11,7 @@
 /API/*.user
 /API/*.suo
 /API/*.log
+/API/appsettings.Development.json
 
 # SQLite
 !API/ecommerce.db
