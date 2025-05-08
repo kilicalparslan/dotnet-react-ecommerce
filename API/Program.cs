@@ -2,10 +2,7 @@ using API.Data;
 using API.Entity;
 using API.Middlewares;
 using API.Services;
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-=======
->>>>>>> d3c1508 (jwt added tokenservice created)
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -35,7 +32,12 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 });
 
-builder.Services.AddAuthentication(x => x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}
+    )
     .AddJwtBearer(x =>
     {
         x.RequireHttpsMetadata = false;
@@ -81,9 +83,9 @@ app.UseCors((opt) =>
 
 app.UseStaticFiles();
 
-app.UseAuthorization();
-
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
