@@ -43,8 +43,7 @@ builder.Services.AddAuthentication(x =>
             x.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = false,
-                ValidIssuer = "sadikturan.com",
-                // ValidIssuers = ["",""],
+                ValidIssuer = "test.com",
                 ValidateAudience = false,
                 ValidAudience = "abc",
                 ValidateIssuerSigningKey = true,

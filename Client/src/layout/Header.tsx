@@ -20,6 +20,11 @@ const links = [
   { name: "Error", path: "/error" },
 ];
 
+const authLinks = [
+  {title: "Login", path: "/login"},
+  {title: "Register", path: "/register"},
+]
+
 const navStyles = {
   color: "inherit",
   textDecoration: "none",
@@ -66,6 +71,18 @@ export default function Header() {
               <ShoppingCart />
             </Badge>
           </IconButton>
+          <List sx={{ display: "flex", flexDirection: "row", ml: 2 }}>
+            {authLinks.map((link) => (
+              <ListItem
+                key={link.path}
+                component={NavLink}
+                to={link.path}
+                sx={navStyles}
+              >
+                {link.title}
+              </ListItem>
+            ))}
+          </List>
         </Box>
       </Toolbar>
     </AppBar>
