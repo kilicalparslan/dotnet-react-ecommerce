@@ -3,6 +3,7 @@ import {
   AppBar,
   Badge,
   Box,
+  Button,
   IconButton,
   List,
   ListItem,
@@ -10,7 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Link, NavLink } from "react-router";
-import { useAppSelector } from "../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { logout } from "../features/account/accountSlice";
 
 const links = [
   { name: "Home", path: "/" },
@@ -21,9 +23,9 @@ const links = [
 ];
 
 const authLinks = [
-  {title: "Login", path: "/login"},
-  {title: "Register", path: "/register"},
-]
+  { title: "Login", path: "/login" },
+  { title: "Register", path: "/register" },
+];
 
 const navStyles = {
   color: "inherit",
@@ -38,6 +40,8 @@ const navStyles = {
 
 export default function Header() {
   const { cart } = useAppSelector((state) => state.cart);
+  const { user } = useAppSelector((state) => state.account);
+  const dispatch = useAppDispatch();
   const itemCount =
     cart?.cartItems.reduce((sum, item) => sum + item.quantity, 0) || 0;
   return (
@@ -71,18 +75,29 @@ export default function Header() {
               <ShoppingCart />
             </Badge>
           </IconButton>
-          <List sx={{ display: "flex", flexDirection: "row", ml: 2 }}>
-            {authLinks.map((link) => (
-              <ListItem
-                key={link.path}
-                component={NavLink}
-                to={link.path}
-                sx={navStyles}
-              >
-                {link.title}
-              </ListItem>
-            ))}
-          </List>
+          {user ? (
+            <>
+              <List sx={{ display: "flex", flexDirection: "row", ml: 2 }}>
+                <Button sx={navStyles}>{user.name}</Button>
+                <Button sx={navStyles} onClick={() => dispatch(logout())} >Logout</Button>
+              </List>
+            </>
+          ) : (
+            <>
+              <List sx={{ display: "flex", flexDirection: "row", ml: 2 }}>
+                {authLinks.map((link) => (
+                  <ListItem
+                    key={link.path}
+                    component={NavLink}
+                    to={link.path}
+                    sx={navStyles}
+                  >
+                    {link.title}
+                  </ListItem>
+                ))}
+              </List>
+            </>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
