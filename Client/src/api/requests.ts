@@ -22,6 +22,7 @@ axios.interceptors.response.use(
 
           throw modelErrors;
         }
+        toast.error(data.title);
         break;
       case 401:
         toast.error(data.title);
@@ -74,10 +75,16 @@ const cart = {
     queries.delete(`cart?productId=${productId}&quantity=${quantity}`),
 };
 
+const account = {
+  login: (formData: any) => queries.post("account/login", formData),
+  register: (formData: any) => queries.post("account/register", formData),
+}
+
 const requests = {
   catalog: catalog,
   errors: errors,
   cart: cart,
+  account: account,
 };
 
 export default requests;

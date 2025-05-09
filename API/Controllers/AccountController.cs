@@ -21,20 +21,24 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginDto model)
+    public async Task<ActionResult<UserDto>> Login(LoginDto model)
     {
         var user = await _userManager.FindByNameAsync(model.UserName);
 
         if (user == null)
         {
-            return BadRequest(new { message = "Invalid username or password" });
+            return BadRequest(new ProblemDetails { Title = "Username is incorrect" });
         }
 
         var result = await _userManager.CheckPasswordAsync(user, model.Password);
 
         if (result)
         {
-            return Ok(new { token = await _tokenService.GenerateToken(user) });
+            return Ok(new UserDto
+            {
+                Name = user.Name!,
+                Token = await _tokenService.GenerateToken(user)
+            });
         }
 
         return Unauthorized();
