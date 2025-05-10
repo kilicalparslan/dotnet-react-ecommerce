@@ -9,9 +9,9 @@ import {
 } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
-import { useAppDispatch } from "../../hooks/hooks";
 import { loginUser } from "./accountSlice";
 import { useNavigate } from "react-router";
+import { useAppDispatch } from "../../store/store";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();

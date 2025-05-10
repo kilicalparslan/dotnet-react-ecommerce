@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Cart } from "../../model/ICart";
 import requests from "../../api/requests";
-import { act } from "react";
 
 interface CartState {
   cart: Cart | null;
@@ -35,6 +34,17 @@ export const deleteItemFromCart = createAsyncThunk<
   }
 });
 
+export const getCart = createAsyncThunk<Cart>(
+  "cart/getCart",
+  async (_, thunkAPI) => {
+    try {
+      return await requests.cart.get();
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({ error: error.data });
+    }
+  }
+);
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -47,6 +57,12 @@ export const cartSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(getCart.fulfilled, (state, action) => {
+      state.cart = action.payload;
+    });
+    builder.addCase(getCart.rejected, (_, action) => {
+      console.log(action.payload);
+    });
     builder.addCase(addItemToCart.pending, (state, action) => {
       console.log("pending", action);
       state.status = "pendingAddItem" + action.meta.arg.productId;
