@@ -13,6 +13,7 @@ import {
 import { Link, NavLink } from "react-router";
 import { logout } from "../features/account/accountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
+import { clearCart } from "../features/cart/cartSlice";
 
 const links = [
   { name: "Home", path: "/" },
@@ -79,7 +80,15 @@ export default function Header() {
             <>
               <List sx={{ display: "flex", flexDirection: "row", ml: 2 }}>
                 <Button sx={navStyles}>{user.name}</Button>
-                <Button sx={navStyles} onClick={() => dispatch(logout())} >Logout</Button>
+                <Button
+                  sx={navStyles}
+                  onClick={() => {
+                    dispatch(logout());
+                    dispatch(clearCart());
+                  }}
+                >
+                  Logout
+                </Button>
               </List>
             </>
           ) : (

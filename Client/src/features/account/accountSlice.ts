@@ -26,7 +26,7 @@ export const loginUser = createAsyncThunk<User, FieldValues>(
 );
 
 export const getUser = createAsyncThunk<User>(
-  "account/getUser",
+  "account/getuser",
   async (_, thunkAPI) => {
     thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem("user")!)));
     try {
