@@ -12,7 +12,6 @@ import {
   MenuItem,
   Stack,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import { Link, NavLink } from "react-router";
 import { logout } from "../features/account/accountSlice";

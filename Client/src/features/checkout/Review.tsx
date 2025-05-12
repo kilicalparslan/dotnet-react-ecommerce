@@ -41,16 +41,16 @@ export default function Review() {
             Payment Information
           </Typography>
           <Typography gutterBottom sx={{ color: "text.secondary" }}>
-            {getValues("card_name")}
+            {getValues("cardname")}
           </Typography>
           <Typography gutterBottom sx={{ color: "text.secondary" }}>
-            {getValues("card_number")}
+            {getValues("cardnumber")}
           </Typography>
           <Typography gutterBottom sx={{ color: "text.secondary" }}>
-            {getValues("card_expiry_date")}
+            {getValues("cardexpiremonth")} / {getValues("cardexpireyear")}
           </Typography>
           <Typography gutterBottom sx={{ color: "text.secondary" }}>
-            {getValues("card_cvv")}
+            {getValues("cardcvc")}
           </Typography>
         </div>
       </Stack>
