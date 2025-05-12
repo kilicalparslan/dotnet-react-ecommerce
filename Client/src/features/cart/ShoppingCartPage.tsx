@@ -90,7 +90,7 @@ export default function ShoppingCartPage() {
                   </LoadingButton>
                 </TableCell>
                 <TableCell align="right">
-                  ${item.price * item.quantity}
+                  ${currencyUSD.format(item.price * item.quantity)}
                 </TableCell>
                 <TableCell align="right">
                   <LoadingButton
