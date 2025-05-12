@@ -16,6 +16,10 @@ import Review from "./Review";
 import { useState } from "react";
 import { ChevronLeftRounded, ChevronRightRounded } from "@mui/icons-material";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import requests from "../../api/requests";
+import { useAppDispatch } from "../../store/store";
+import { clearCart } from "../cart/cartSlice";
+import { LoadingButton } from "@mui/lab";
 
 const steps = ["Delivery Information", "Payment", "Order Summary"];
 
@@ -35,9 +39,24 @@ function getStepContent(step: number) {
 export default function CheckoutPage() {
   const [activeStep, setActiveStep] = useState(0);
   const methods = useForm();
-  function handleNext(data: FieldValues) {
-    console.log(data);
-    setActiveStep(activeStep + 1);
+  const [orderId, setOrderId] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+
+  async function handleNext(data: FieldValues) {
+    if (activeStep === 2) {
+      setLoading(true);
+      try {
+        setOrderId(await requests.order.createOrder(data));
+        setActiveStep(activeStep + 1);
+        dispatch(clearCart());
+        setLoading(false);
+      } catch (error: any) {
+        setLoading(false);
+      }
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   }
   function handlePrevious() {
     setActiveStep(activeStep - 1);
@@ -46,13 +65,15 @@ export default function CheckoutPage() {
     <FormProvider {...methods}>
       <Paper>
         <Grid container spacing={4}>
+          {activeStep !== steps.length && (
           <Grid
             size={4}
             sx={{ borderRight: "1px solid", borderColor: "divider", p: 3 }}
           >
             <Info />
           </Grid>
-          <Grid size={8} sx={{ p: 3 }}>
+          )}
+          <Grid size={activeStep !== steps.length ? 8: 12} sx={{ p: 3 }}>
             <Box>
               <Stepper activeStep={activeStep} sx={{ height: 40, mb: 4 }}>
                 {steps.map((label) => (
@@ -70,7 +91,8 @@ export default function CheckoutPage() {
                     Thank you. We have received your order.
                   </Typography>
                   <Typography variant="body1" sx={{ color: "text.secondary" }}>
-                    Your order number is <strong>#1234</strong>. We will send an e-mail when your order is prepared.
+                    Your order number is <strong>#{orderId}</strong>. We will
+                    send an e-mail when your order is prepared.
                   </Typography>
                   <Button
                     sx={{
@@ -105,13 +127,14 @@ export default function CheckoutPage() {
                           Back
                         </Button>
                       )}
-                      <Button
+                      <LoadingButton
                         type="submit"
+                        loading={loading}
                         startIcon={<ChevronRightRounded />}
                         variant="contained"
                       >
-                        Next
-                      </Button>
+                        {activeStep == 2 ? "Complete Order" : "Next"}
+                      </LoadingButton>
                     </Box>
                   </Box>
                 </form>

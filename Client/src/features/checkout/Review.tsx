@@ -21,11 +21,13 @@ export default function Review() {
             <DeliveryDining color="primary" />
             Delivery Information
           </Typography>
-          <Typography gutterBottom sx={{color: "text.secondary"}}>
+          <Typography gutterBottom sx={{ color: "text.secondary" }}>
             {getValues("firstname")} {getValues("lastname")}
           </Typography>
-          <Typography gutterBottom sx={{color: "text.secondary"}}>{getValues("phone")}</Typography>
-          <Typography gutterBottom sx={{color: "text.secondary"}}>
+          <Typography gutterBottom sx={{ color: "text.secondary" }}>
+            {getValues("phone")}
+          </Typography>
+          <Typography gutterBottom sx={{ color: "text.secondary" }}>
             {getValues("addressline")} / {getValues("city")}
           </Typography>
         </div>
@@ -38,10 +40,18 @@ export default function Review() {
             <Payments color="primary" />
             Payment Information
           </Typography>
-          <Typography gutterBottom sx={{color: "text.secondary"}}>{getValues("card_name")}</Typography>
-          <Typography gutterBottom sx={{color: "text.secondary"}}>{getValues("card_number")}</Typography>
-          <Typography gutterBottom sx={{color: "text.secondary"}}>{getValues("card_expiry_date")}</Typography>
-          <Typography gutterBottom sx={{color: "text.secondary"}}>{getValues("card_cvv")}</Typography>
+          <Typography gutterBottom sx={{ color: "text.secondary" }}>
+            {getValues("card_name")}
+          </Typography>
+          <Typography gutterBottom sx={{ color: "text.secondary" }}>
+            {getValues("card_number")}
+          </Typography>
+          <Typography gutterBottom sx={{ color: "text.secondary" }}>
+            {getValues("card_expiry_date")}
+          </Typography>
+          <Typography gutterBottom sx={{ color: "text.secondary" }}>
+            {getValues("card_cvv")}
+          </Typography>
         </div>
       </Stack>
     </Stack>

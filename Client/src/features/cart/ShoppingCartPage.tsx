@@ -27,7 +27,7 @@ export default function ShoppingCartPage() {
   const { cart, status } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
 
-  if (cart?.cartItems.length === 0)
+  if (!cart || cart?.cartItems.length === 0)
     return <Alert severity="warning">Sepetinizde ürün yok</Alert>;
 
   return (
